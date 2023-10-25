@@ -1,4 +1,3 @@
-# import itertools
 from Models.stock import Stock
 from Models.portfolio import Portfolio
 
