@@ -63,8 +63,9 @@ class Controller():
         for stock in stocks:
             stocks_list.append(
                 Stock(stock["name"], stock["stock_price"], stock["percent_gain"]))
-
-        sorted_stocks = sort_stocks(stocks_list)
+# sort_stocks(stocks_list)
+        sorted_stocks = sorted(
+            stocks_list, key=lambda stock: stock.gain, reverse=True)
         portfolio = Portfolio()
 
         for stock in sorted_stocks:
