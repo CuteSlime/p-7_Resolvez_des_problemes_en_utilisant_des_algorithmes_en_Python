@@ -2,6 +2,7 @@
 from Models.stock import Stock
 from Models.portfolio import Portfolio
 
+
 stocks = [
     {"name": "Action-1", "stock_price": 20, "percent_gain": 5},
     {"name": "Action-2", "stock_price": 30, "percent_gain": 10},
@@ -26,31 +27,19 @@ stocks = [
 ]
 
 
-def sort_stocks(stocks_list: list):
-    '''Trie la liste des actions par gain
+def optimized_portfolio(stocks_list):
+    sorted_stocks = sorted(stocks_list,
+                           key=lambda stock: stock.gain,
+                           reverse=True
+                           )
+    portfolio = Portfolio()
 
-    Args:
-        stocks_list (_list_): liste des actions à trier
+    for stock in sorted_stocks:
+        if stock.stock_price <= portfolio.investment:
+            portfolio.add_stock(stock)
+            portfolio.investment -= stock.stock_price
 
-    Returns:
-        _list_: liste des actions trier par gain
-    '''
-
-    i = 0
-    sorted_stocks = []
-    not_sorted_stocks = stocks_list[:]
-    while i < len(stocks_list):
-        gain = 0
-
-        best_stock = not_sorted_stocks[0]
-        for stock in not_sorted_stocks:
-            if stock.gain > gain:
-                gain = stock.gain
-                best_stock = stock
-        sorted_stocks.append(best_stock)
-        not_sorted_stocks.remove(best_stock)
-        i += 1
-    return sorted_stocks
+    return portfolio
 
 
 class Controller():
@@ -59,75 +48,12 @@ class Controller():
 
     def run(self):
         stocks_list = []
-        # portfolio_list = []
         for stock in stocks:
-            stocks_list.append(
-                Stock(stock["name"], stock["stock_price"], stock["percent_gain"]))
-# sort_stocks(stocks_list)
-        sorted_stocks = sorted(
-            stocks_list, key=lambda stock: stock.gain, reverse=True)
-        portfolio = Portfolio()
+            stocks_list.append(Stock(stock["name"],
+                                     stock["stock_price"],
+                                     stock["percent_gain"]
+                                     ))
 
-        for stock in sorted_stocks:
-            if stock.stock_price <= portfolio.investment:
-                portfolio.add_stock(stock)
-                portfolio.investment -= stock.stock_price
+        portfolio = optimized_portfolio(stocks_list)
 
-        for stock in portfolio.stock_list:
-            print(stock.name)
-        print("Total Gain:", portfolio.calculate_total_gain())
-        # stocks_number = len(stocks_list)
-        # for stock in stocks_list:
-        #     i=0
-        #     while i <= stocks_number:
-        #         portfolio_list.append(Portfolio(stock_list=stock))
-        #         i+= 1
-
-        # new_stocks_list = stocks_list[:]
-
-    # def compatible_stocks(list_action, portfolio_list):
-    #     for portfolio in portfolio_list:
-    #     if list_action == []:
-    #         return
-    #     edited_list_action = list_action[:]
-    #     action_possible = []
-    #     for action in edited_list_action:
-    #         if (rest - action) >= 0:
-    #             action_possible.append(action)
-    #     return compatible_stocks(rest, action_possible)
-
-
-# fonction(list d'action)
-# action_possible = list_action[:]
-# dans la list d'action on teste
-# action[i] + chaque action
-# si : l'action dépasse la limite on l'ajoute au [action inpossible]
-# si : l'action ne dépasse pas la limite on l'ajoute au [action possible] index
-# on fait list [best action]
-
-# on refait une boucle sur la list des [action possible] en enlevant action[i] de l'inverstissement possible
-
-
-#  invest_list = []
-#         while len(new_stocks_list) > 0:
-#             # print(new_stocks_list)
-#             investment = 500
-#             new_stocks_list = new_stocks_list[:]
-#             temp_stocks_list = []
-#             for stock in new_stocks_list:
-#                 if stock.stock_price < investment:
-#                     investment -= stock.stock_price
-#                     temp_stocks_list.append(stock)
-#                     # print(
-#                     #     f"{stock.name} après investisement laisse {investment} à utilisé")
-#             invest_list.append(temp_stocks_list)
-#             # print(temp_stocks_list)
-
-#             del new_stocks_list[0]
-#         print(invest_list)
-#         for i, stock in enumerate(new_stocks_list):
-#             investment = 500
-#             if i in invest_list.items():
-
-#             invest_list
-#             print(stock, i)
+        self.view.stocks_to_buy_with_gain(portfolio)

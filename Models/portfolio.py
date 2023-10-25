@@ -10,4 +10,5 @@ class Portfolio():
         total_gain = 0
         for stock in self.stock_list:
             total_gain += stock.gain
+
         return total_gain
