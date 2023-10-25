@@ -1,5 +1,8 @@
+import csv
+import time
 from Models.stock import Stock
 from Models.portfolio import Portfolio
+start_time = time.time()
 
 
 stocks = [
@@ -26,33 +29,51 @@ stocks = [
 ]
 
 
-def optimized_portfolio(stocks_list):
-    sorted_stocks = sorted(stocks_list,
-                           key=lambda stock: stock.gain,
-                           reverse=True
-                           )
-    portfolio = Portfolio()
-
-    for stock in sorted_stocks:
-        if stock.stock_price <= portfolio.investment:
-            portfolio.add_stock(stock)
-            portfolio.investment -= stock.stock_price
-
-    return portfolio
-
-
 class Controller():
     def __init__(self, view):
         self.view = view
 
-    def run(self):
+    def csv_converter(self, filename: str):
+        with open(f'./Data/{filename}.csv', 'r', encoding="utf-8-sig", newline="") as stocks:
+            reader = csv.DictReader(
+                stocks, dialect='excel', delimiter=',', quotechar='"')
+            stocks = []
+            for row in reader:
+                if float(row['price']) > 0:
+                    stocks.append(row)
         stocks_list = []
         for stock in stocks:
             stocks_list.append(Stock(stock["name"],
-                                     stock["stock_price"],
-                                     stock["percent_gain"]
+                                     float(stock["price"]),
+                                     float(stock["profit"])
                                      ))
+        return stocks_list
 
-        portfolio = optimized_portfolio(stocks_list)
+    def optimized_portfolio(self, stocks_list):
+        sorted_stocks = sorted(stocks_list,
+                               key=lambda stock: stock.percent_gain,
+                               reverse=True
+                               )
+        portfolio = Portfolio()
+
+        for stock in sorted_stocks:
+            if stock.stock_price <= portfolio.investment:
+                portfolio.add_stock(stock)
+                portfolio.investment -= stock.stock_price
+
+        return portfolio
+
+    def run(self):
+        # filename = 'dataset1_Python+P7'
+        stocks_list = []
+        for stock in stocks:
+            stocks_list.append(Stock(stock["name"],
+                                     float(stock["stock_price"]),
+                                     float(stock["percent_gain"])
+                                     ))
+        # stocks_list = self.csv_converter(filename)
+
+        portfolio = self.optimized_portfolio(stocks_list)
 
         self.view.stocks_to_buy_with_gain(portfolio)
+        print("--- %s seconds ---" % (time.time() - start_time))
