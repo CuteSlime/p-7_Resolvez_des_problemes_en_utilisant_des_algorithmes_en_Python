@@ -5,6 +5,7 @@ class Portfolio():
 
     def add_stock(self, stock: object):
         self.stock_list.append(stock)
+        self.investment -= stock.stock_price
 
     def calculate_total_gain(self):
         total_gain = 0
