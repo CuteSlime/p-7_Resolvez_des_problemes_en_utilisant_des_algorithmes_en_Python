@@ -1,6 +1,6 @@
 import itertools
 import time
-import csv
+
 
 start_time = time.time() * 1000
 
@@ -54,20 +54,6 @@ stocks = [
 ]
 
 
-def csv_converter(filename: str):
-    with open(f'./Data/{filename}.csv', 'r', encoding="utf-8-sig", newline="") as stocks:
-        reader = csv.DictReader(
-            stocks, dialect='excel', delimiter=',', quotechar='"')
-        stocks = []
-        for row in reader:
-            if float(row['price']) > 0:
-                stocks.append(row)
-
-    return stocks
-
-
-filename = 'dataset2_Python+P7'
-stocks = csv_converter(filename)
 stocks_list = []
 
 for stock in stocks:
