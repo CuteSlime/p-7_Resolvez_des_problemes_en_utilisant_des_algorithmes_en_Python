@@ -30,6 +30,40 @@ class Portfolio():
         return total_gain
 
 
+def create_portfolio(list_a):
+    max_total_gain = 0
+    for list_of_stocks in list_a:
+        portfolio = Portfolio()
+
+        if sum(stock.stock_price for stock in list_of_stocks) <= portfolio.investment:
+            for item in list_of_stocks:
+                portfolio.add_stock(item)
+            total_gain = portfolio.calculate_total_gain()
+            if total_gain > max_total_gain:
+                max_total_gain = total_gain
+                yield portfolio
+
+
+def best_portfolio(stocks_list: list):
+
+    i = 2
+    list_a = []
+    while i < len(stocks_list):
+        list_of_tulpe = itertools.combinations(stocks_list, i)
+        list_a.extend(list_of_tulpe)
+        i += 1
+
+    portfolios = create_portfolio(list_a)
+
+    sorted_portfolios = sorted(portfolios,
+                               key=lambda portfolio: portfolio.calculate_total_gain(),
+                               reverse=True
+                               )
+
+    portfolio = sorted_portfolios[0]
+    return portfolio
+
+
 stocks = [
     {"name": "Action-1", "price": 20, "profit": 5},
     {"name": "Action-2", "price": 30, "profit": 10},
@@ -62,28 +96,8 @@ for stock in stocks:
                              float(stock["profit"])
                              ))
 
-i = 2
-list_a = []
-while i < len(stocks_list):
-    list_of_tulpe = itertools.combinations(stocks_list, i)
-    for item in list_of_tulpe:
-        list_a.append(item)
-    i += 1
-portfolios = []
-for list_of_stocks in list_a:
-    portfolio = Portfolio()
 
-    if sum(stock.stock_price for stock in list_of_stocks) <= portfolio.investment:
-        for item in list_of_stocks:
-            portfolio.add_stock(item)
-        portfolios.append(portfolio)
-
-sorted_portfolios = sorted(portfolios,
-                           key=lambda portfolio: portfolio.calculate_total_gain(),
-                           reverse=True
-                           )
-
-portfolio = sorted_portfolios[0]
+portfolio = best_portfolio(stocks_list)
 
 for stock in portfolio.stock_list:
     print(f"{stock.name} raporte : {stock.gain}€")
