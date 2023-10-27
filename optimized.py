@@ -69,7 +69,7 @@ def csv_converter(filename: str):
 
 def optimized_portfolio(stocks_list):
     sorted_stocks = sorted(stocks_list,
-                           key=lambda stock: stock.ratio,
+                           key=lambda stock: stock.percent_gain,
                            reverse=True
                            )
     portfolio = Portfolio()
