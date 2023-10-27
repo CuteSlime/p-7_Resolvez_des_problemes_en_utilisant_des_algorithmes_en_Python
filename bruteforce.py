@@ -56,16 +56,19 @@ class Portfolio():
 
 def create_portfolio(list_a):
     max_total_gain = 0
+    best_portfolio = ""
     for list_of_stocks in list_a:
         portfolio = Portfolio()
+        total_price = sum(stock.stock_price for stock in list_of_stocks)
 
-        if sum(stock.stock_price for stock in list_of_stocks) <= portfolio.investment:
+        if total_price <= portfolio.investment:
             for item in list_of_stocks:
                 portfolio.add_stock(item)
             total_gain = portfolio.calculate_total_gain()
             if total_gain > max_total_gain:
                 max_total_gain = total_gain
-                yield portfolio
+                best_portfolio = portfolio
+    return best_portfolio
 
 
 def bruteforce_portfolio(stocks_list: list):
@@ -77,14 +80,8 @@ def bruteforce_portfolio(stocks_list: list):
         list_a.extend(list_of_tulpe)
         i += 1
 
-    portfolios = create_portfolio(list_a)
+    portfolio = create_portfolio(list_a)
 
-    sorted_portfolios = sorted(portfolios,
-                               key=lambda portfolio: portfolio.calculate_total_gain(),
-                               reverse=True
-                               )
-
-    portfolio = sorted_portfolios[0]
     return portfolio
 
 
