@@ -68,7 +68,7 @@ def create_portfolio(list_a):
                 yield portfolio
 
 
-def best_portfolio(stocks_list: list):
+def bruteforce_portfolio(stocks_list: list):
 
     i = 2
     list_a = []
@@ -97,7 +97,7 @@ for stock in stocks:
                              ))
 
 
-portfolio = best_portfolio(stocks_list)
+portfolio = bruteforce_portfolio(stocks_list)
 
 for stock in portfolio.stock_list:
     print(f"{stock.name} raporte : {stock.gain}€")
