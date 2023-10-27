@@ -2,7 +2,7 @@ import csv
 import time
 from Models.stock import Stock
 from Models.portfolio import Portfolio
-start_time = time.time()
+start_time = time.time() * 1000
 
 
 stocks = [
@@ -76,4 +76,4 @@ class Controller():
         portfolio = self.optimized_portfolio(stocks_list)
 
         self.view.stocks_to_buy_with_gain(portfolio)
-        print("--- %s seconds ---" % (time.time() - start_time))
+        print("--- %s ms ---" % ((time.time()*1000) - start_time))
