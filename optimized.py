@@ -59,10 +59,7 @@ def csv_converter(filename: str):
     with open(f'./Data/{filename}.csv', 'r', encoding="utf-8-sig", newline="") as stocks:
         reader = csv.DictReader(
             stocks, dialect='excel', delimiter=',', quotechar='"')
-        stocks = []
-        for row in reader:
-            if float(row['price']) > 0:
-                stocks.append(row)
+        stocks = [row for row in reader if float(row['price']) > 0]
 
     return stocks
 
@@ -83,12 +80,9 @@ def optimized_portfolio(stocks_list):
 
 filename = 'dataset2_Python+P7'
 stocks = csv_converter(filename)
-stocks_list = []
-for stock in stocks:
-    stocks_list.append(Stock(stock["name"],
-                             float(stock["price"]),
-                             float(stock["profit"])
-                             ))
+stocks_list = [Stock(stock["name"], float(stock["price"]),
+                     float(stock["profit"])) for stock in stocks]
+
 
 portfolio = optimized_portfolio(stocks_list)
 
