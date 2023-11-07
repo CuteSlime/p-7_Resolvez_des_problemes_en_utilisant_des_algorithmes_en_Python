@@ -11,6 +11,7 @@ class Stock():
         self.stock_price = stock_price
         self.percent_gain = percent_gain
         self.gain = (stock_price * percent_gain) / 100
+        self.ratio = self.gain/stock_price
 
 
 class Portfolio():
@@ -66,7 +67,7 @@ def csv_converter(filename: str):
 
 def optimized_portfolio(stocks_list):
     sorted_stocks = sorted(stocks_list,
-                           key=lambda stock: stock.percent_gain,
+                           key=lambda stock: stock.ratio,
                            reverse=True
                            )
     portfolio = Portfolio()
