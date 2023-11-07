@@ -1,7 +1,7 @@
 import itertools
 import time
 
-
+# chrono
 start_time = time.time() * 1000
 
 # data
@@ -54,10 +54,20 @@ class Portfolio():
         return total_gain
 
 
-def create_portfolio(list_a):
+def create_portfolio(list_tulpes_stocks):
+    '''iter on a list of tulpe to get the best portofolio,
+
+    Args:
+        list_tulpes_stocks (list): a list of tulpe where each tulpe contain a list of stocks
+
+    Returns:
+        object: return the best portofolio of stocks
+    '''
+
     max_total_gain = 0
     best_portfolio = ""
-    for list_of_stocks in list_a:
+
+    for list_of_stocks in list_tulpes_stocks:
         portfolio = Portfolio()
         total_price = sum(stock.stock_price for stock in list_of_stocks)
 
@@ -72,15 +82,25 @@ def create_portfolio(list_a):
 
 
 def bruteforce_portfolio(stocks_list: list):
+    '''use itertool to make a list (list_tulpes_stocks) of all posibility,
+       and call create_portfolio with it to get the best portofolio.
+
+
+    Args:
+        stocks_list (list): list of all stocks
+
+    Returns:
+        object: return an object portofolio
+    '''
 
     i = 2
-    list_a = []
+    list_tulpes_stocks = []
     while i < len(stocks_list)+1:
-        list_of_tulpe = itertools.combinations(stocks_list, i)
-        list_a.extend(list_of_tulpe)
+        list_of_tulpes = itertools.combinations(stocks_list, i)
+        list_tulpes_stocks.extend(list_of_tulpes)
         i += 1
 
-    portfolio = create_portfolio(list_a)
+    portfolio = create_portfolio(list_tulpes_stocks)
 
     return portfolio
 
