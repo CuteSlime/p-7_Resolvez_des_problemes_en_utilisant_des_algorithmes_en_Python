@@ -75,7 +75,7 @@ def bruteforce_portfolio(stocks_list: list):
 
     i = 2
     list_a = []
-    while i < len(stocks_list):
+    while i < len(stocks_list)+1:
         list_of_tulpe = itertools.combinations(stocks_list, i)
         list_a.extend(list_of_tulpe)
         i += 1
