@@ -1,0 +1,52 @@
+Algorithme principal : optimized_portfolio
+
+Variable
+    actions[] <= dataset1_Python+P7.csv : TABLEAU OBJETS
+    base_investisement <= 500 : DECIMAL
+
+Début
+    Classe action
+        Attributs : nom, prix_action, pourcentage_de_gain, gain, ratio
+        Méthode init (nom, prix_action, pourcentage_de_gain)
+            nom = nom
+            prix_action = prix_action
+            pourcentage_de_gain = pourcentage_de_gain
+            gain = (prix_action * pourcentage_de_gain) / 100
+            ratio = gain / prix_action
+        Fin Méthode
+
+    Classe Portfolio
+        Attributs : liste_actions, investissement
+        Méthode __init__ (liste_actions=[], investissement=500)
+            liste_actions = liste_actions
+            investissement = investissement
+        Fin Méthode
+
+        Méthode ajouté_action (action)
+            liste_actions.append(action)
+            investissement = investissement - action.prix_action
+        Fin Méthode
+
+        Méthode calcule_gain_total ()
+            gain_total = 0        
+            Pour chaque action dans liste_actions
+                gain_total = gain_total + action.gain
+            Fin Pour
+            Retourner gain_total
+        Fin Méthode
+
+    Fonction portfolio_optimisé (actions)
+        Trier actions en utilisant le ratio comme clé de tri
+        Retourner portfolio
+    Fin Fonction
+
+    actions = portfolio_optimisé(actions)
+
+    Pour chaque action dans list_actions de portfolio
+        Afficher action.name, action.gain
+    Fin Pour
+    
+    Afficher base_investisement - investissement de portfolio
+    Afficher calcule_gain_total de portfolio
+
+Fin Algorithme principal
