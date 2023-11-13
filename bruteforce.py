@@ -96,13 +96,101 @@ def bruteforce_portfolio(stocks_list: list):
     i = 2
     list_tulpes_stocks = []
     while i < len(stocks_list)+1:
-        list_of_tulpes = itertools.combinations(stocks_list, i)
+        list_of_tulpes = ()
+        list_of_tulpes = combinations(stocks_list, i, 500)
+        # print(list(list_of_tulpes))
         list_tulpes_stocks.extend(list_of_tulpes)
         i += 1
 
     portfolio = create_portfolio(list_tulpes_stocks)
 
     return portfolio
+
+
+def combinations(iterable, group_by, investment):
+
+    pool = tuple(iterable)
+    n = len(pool)
+    if group_by > n:
+        return
+    indices = list(range(group_by))
+    stocks_price = 0
+    old_stocks_gain = 0
+    stocks_gain = 0
+    ratio = 0
+    for i in indices:
+        stocks_price += pool[i].stock_price
+        stocks_gain += pool[i].gain
+    if stocks_price > 0:
+        ratio = stocks_gain / stocks_price
+    base_ratio = ratio
+
+    if stocks_price <= investment:
+        old_stocks_gain = stocks_gain
+        yield tuple(pool[i] for i in indices)
+
+    while True:
+        stocks_price = 0
+        stocks_gain = 0
+        ratio = 0
+        for i in reversed(range(group_by)):
+            if indices[i] != i + n - group_by:
+                break
+        else:
+            return
+        indices[i] += 1
+        for j in range(i+1, group_by):
+            indices[j] = indices[j-1] + 1
+        for i in indices:
+            stocks_price += pool[i].stock_price
+            stocks_gain += pool[i].gain
+
+        if stocks_price > 0:
+            ratio = stocks_gain / stocks_price
+
+        if stocks_price <= investment and ratio >= base_ratio:
+
+            if stocks_gain >= old_stocks_gain:
+                old_stocks_gain = stocks_gain
+                base_ratio = ratio
+                yield tuple(pool[i] for i in indices)
+
+
+# def combinations(iterable, group_by, investment):
+    pool = tuple(iterable)
+    n = len(pool)
+    if group_by > n:
+        return
+
+    def generate_indices(start, indices):
+        if len(indices) == group_by:
+            yield tuple(indices)
+        else:
+            for i in range(start, n):
+                yield from generate_indices(i + 1, indices + [i])
+
+    stocks_price = 0
+    old_stocks_gain = 0
+    stocks_gain = 0
+    ratio = 0
+
+    for indices in generate_indices(0, []):
+        stocks_price = 0
+        stocks_gain = 0
+        ratio = 0
+
+        for i in indices:
+            stocks_price += pool[i].stock_price
+            stocks_gain += pool[i].gain
+
+        if stocks_price > 0:
+            ratio = stocks_gain / stocks_price
+
+        if stocks_price <= investment and ratio >= base_ratio:
+            if stocks_gain >= old_stocks_gain:
+                old_stocks_gain = stocks_gain
+                base_ratio = ratio
+                yield tuple(pool[i] for i in indices)
 
 
 stocks_list = []
