@@ -1,4 +1,3 @@
-import itertools
 import time
 
 # chrono
@@ -82,7 +81,7 @@ def create_portfolio(list_tulpes_stocks):
 
 
 def bruteforce_portfolio(stocks_list: list):
-    '''use itertool to make a list (list_tulpes_stocks) of all posibility,
+    '''use combinations to make a list (list_tulpes_stocks) of all posibility,
        and call create_portfolio with it to get the best portofolio.
 
 
@@ -95,13 +94,12 @@ def bruteforce_portfolio(stocks_list: list):
 
     i = 2
     list_tulpes_stocks = []
-    while i < len(stocks_list)+1:
+    while i <= len(stocks_list):
         list_of_tulpes = ()
         list_of_tulpes = combinations(stocks_list, i, 500)
         # print(list(list_of_tulpes))
         list_tulpes_stocks.extend(list_of_tulpes)
         i += 1
-    list_tulpes_stocks = list(list_tulpes_stocks)
     portfolio = create_portfolio(list_tulpes_stocks)
 
     return portfolio
@@ -129,38 +127,6 @@ def combinations(iterable, group_by, investment):
         old_stocks_gain = stocks_gain
         yield tuple(pool[i] for i in indices)
 
-    def recursive_function(indices, pool, group_by, n, investment, base_ratio, old_stocks_gain):
-        stocks_price = 0
-        stocks_gain = 0
-        ratio = 0
-
-        for i in reversed(range(group_by)):
-            if indices[i] != i + n - group_by:
-                break
-        else:
-            return
-
-        indices[i] += 1
-
-        for j in range(i+1, group_by):
-            indices[j] = indices[j-1] + 1
-
-        for i in indices:
-            stocks_price += pool[i].stock_price
-            stocks_gain += pool[i].gain
-
-        if stocks_price > 0:
-            ratio = stocks_gain / stocks_price
-
-        if stocks_price <= investment and ratio >= base_ratio:
-            if stocks_gain >= old_stocks_gain:
-                old_stocks_gain = stocks_gain
-                base_ratio = ratio
-                yield tuple(pool[i] for i in indices)
-
-        yield from recursive_function(indices, pool, group_by, n, investment, base_ratio, old_stocks_gain)
-    recursive_function(indices, pool, group_by, n,
-                       investment, base_ratio, old_stocks_gain)
     while True:
         stocks_price = 0
         stocks_gain = 0
@@ -187,6 +153,39 @@ def combinations(iterable, group_by, investment):
                 base_ratio = ratio
                 yield tuple(pool[i] for i in indices)
 
+    # def recursive_function(indices, pool, group_by, n, investment, base_ratio, old_stocks_gain):
+    #     stocks_price = 0
+    #     stocks_gain = 0
+    #     ratio = 0
+
+    #     for i in reversed(range(group_by)):
+    #         if indices[i] != i + n - group_by:
+    #             break
+    #     else:
+    #         return
+
+    #     indices[i] += 1
+
+    #     for j in range(i+1, group_by):
+    #         indices[j] = indices[j-1] + 1
+
+    #     for i in indices:
+    #         stocks_price += pool[i].stock_price
+    #         stocks_gain += pool[i].gain
+
+    #     if stocks_price > 0:
+    #         ratio = stocks_gain / stocks_price
+
+    #     if stocks_price <= investment and ratio >= base_ratio:
+    #         if stocks_gain >= old_stocks_gain:
+    #             old_stocks_gain = stocks_gain
+    #             base_ratio = ratio
+    #             yield tuple(pool[i] for i in indices)
+
+    #     yield from recursive_function(indices, pool, group_by, n, investment, base_ratio, old_stocks_gain)
+    # recursive_function(indices, pool, group_by, n,
+    #                    investment, base_ratio, old_stocks_gain)
+
 
 stocks_list = []
 
@@ -200,8 +199,8 @@ for stock in stocks:
 portfolio = bruteforce_portfolio(stocks_list)
 
 for stock in portfolio.stock_list:
-    print(f"{stock.name} raporte : {stock.gain}€")
-print(f"montant total des actions :{500 - portfolio.investment}€")
-print("Gain total des actions apres 2 ans :",
+    print(f"{stock.name} coût: { round(stock.stock_price, 2)} gain :{ round(stock.gain, 2)}€")
+print(f"coût total :{round(500 - portfolio.investment, 2)}€")
+print("Gain total :",
       round(portfolio.calculate_total_gain(), 2), "€")
 print("--- %s ms ---" % ((time.time()*1000) - start_time))

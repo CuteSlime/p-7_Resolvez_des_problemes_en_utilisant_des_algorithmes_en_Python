@@ -88,9 +88,8 @@ stocks_list = [Stock(stock["name"], float(stock["price"]),
 portfolio = optimized_portfolio(stocks_list)
 
 for stock in portfolio.stock_list:
-    print(f"{stock.name} raporte : {round(stock.gain, 3)}€")
-print(f"montant total des actions :{round((500 - portfolio.investment), 2)}€")
-print("Gain total des actions apres 2 ans :",
-      round(portfolio.calculate_total_gain(), 2), "€"
-      )
+    print(f"{stock.name} coût: { round(stock.stock_price, 2)} gain :{ round(stock.gain, 2)}€")
+print(f"coût total :{round(500 - portfolio.investment, 2)}€")
+print("Gain total :",
+      round(portfolio.calculate_total_gain(), 2), "€")
 print("--- %s ms ---" % ((time.time()*1000) - start_time))
