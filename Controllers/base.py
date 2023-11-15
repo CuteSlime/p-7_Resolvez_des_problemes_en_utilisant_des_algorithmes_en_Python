@@ -1,9 +1,8 @@
 import time
 import csv
-import itertools
 from Models.stock import Stock
 from Models.portfolio import Portfolio
-start_time = time.time() * 1000
+start_time = time.time()*1000
 
 
 # data
@@ -136,16 +135,16 @@ class Controller():
     def run(self):
 
         stocks_list = []
-        # filename = 'dataset1_Python+P7 copy'
-        # stocks = self.csv_converter(filename)
+        filename = 'dataset1_Python+P7 copy'
+        stocks = self.csv_converter(filename)
         for stock in stocks:
             stocks_list.append(Stock(stock["name"],
                                      float(stock["price"]),
                                      float(stock["profit"])
                                      ))
 
-        # portfolio = self.optimized_portfolio(stocks_list)
-        portfolio = self.bruteforce_portfolio(stocks_list)
+        portfolio = self.optimized_portfolio(stocks_list)
+        # portfolio = self.bruteforce_portfolio(stocks_list)
 
         self.view.stocks_to_buy_with_gain(portfolio)
-        print("--- %s ms ---" % ((time.time()*1000) - start_time))
+        print("--- %s s ---" % ((time.time()*1000) - start_time))
