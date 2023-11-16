@@ -2,7 +2,7 @@ import time
 
 # chrono
 start_time = time.time() * 1000
-
+MAX_INVESTMENT = 500
 # data
 stocks = [
     {"name": "Action-1", "price": 20, "profit": 5},
@@ -39,7 +39,7 @@ class Stock():
 class Portfolio():
     def __init__(self, **kwargs):
         self.stock_list = kwargs.get("stock_list", [])
-        self.investment = kwargs.get("investment", 500)
+        self.investment = kwargs.get("investment", MAX_INVESTMENT)
 
     def add_stock(self, stock: object):
         self.stock_list.append(stock)
@@ -96,8 +96,7 @@ def bruteforce_portfolio(stocks_list: list):
     list_tulpes_stocks = []
     while i <= len(stocks_list):
         list_of_tulpes = ()
-        list_of_tulpes = combinations(stocks_list, i, 500)
-        # print(list(list_of_tulpes))
+        list_of_tulpes = combinations(stocks_list, i, MAX_INVESTMENT)
         list_tulpes_stocks.extend(list_of_tulpes)
         i += 1
     portfolio = create_portfolio(list_tulpes_stocks)
@@ -106,6 +105,16 @@ def bruteforce_portfolio(stocks_list: list):
 
 
 def combinations(iterable, group_by, investment):
+    '''divide a list into group and return the best ones
+
+    Args:
+        iterable (list): a list of objects
+        group_by (int): the number of object to take from the list to add into group
+        investment (int): the amount of max investment
+
+    Yields:
+        list: a list of tulpes
+    '''
 
     pool = tuple(iterable)
     n = len(pool)
@@ -153,40 +162,8 @@ def combinations(iterable, group_by, investment):
                 base_ratio = ratio
                 yield tuple(pool[i] for i in indices)
 
-    # def recursive_function(indices, pool, group_by, n, investment, base_ratio, old_stocks_gain):
-    #     stocks_price = 0
-    #     stocks_gain = 0
-    #     ratio = 0
 
-    #     for i in reversed(range(group_by)):
-    #         if indices[i] != i + n - group_by:
-    #             break
-    #     else:
-    #         return
-
-    #     indices[i] += 1
-
-    #     for j in range(i+1, group_by):
-    #         indices[j] = indices[j-1] + 1
-
-    #     for i in indices:
-    #         stocks_price += pool[i].stock_price
-    #         stocks_gain += pool[i].gain
-
-    #     if stocks_price > 0:
-    #         ratio = stocks_gain / stocks_price
-
-    #     if stocks_price <= investment and ratio >= base_ratio:
-    #         if stocks_gain >= old_stocks_gain:
-    #             old_stocks_gain = stocks_gain
-    #             base_ratio = ratio
-    #             yield tuple(pool[i] for i in indices)
-
-    #     yield from recursive_function(indices, pool, group_by, n, investment, base_ratio, old_stocks_gain)
-    # recursive_function(indices, pool, group_by, n,
-    #                    investment, base_ratio, old_stocks_gain)
-
-
+# main code
 stocks_list = []
 
 for stock in stocks:
